@@ -101,5 +101,28 @@ public class EmployeeRepositoryTests {
         assertThat(result).hasSize(1);
     }
 
+    @Test
+    void shouldFindByJpqlEmployee() {
+        // Arrange
+        var firstName = "TestFirstName";
+        var lastName = "TestLastName";
+        var employee = Employee.builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .email("test@email.com")
+                .build();
+
+        testee.save(employee);
+
+        // Act
+        var result = testee.findByJPQL(firstName, lastName);
+
+        // Assert
+        assertThat(result).isNotNull();
+        assertThat(result)
+                .returns("TestFirstName", Employee::getFirstName)
+                .returns("TestLastName", Employee::getLastName)
+                .returns("test@email.com", Employee::getEmail);
+    }
 
 }
