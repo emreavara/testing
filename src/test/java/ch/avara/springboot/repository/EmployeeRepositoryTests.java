@@ -55,7 +55,51 @@ public class EmployeeRepositoryTests {
 
         // Assert
         assertThat(result).hasSize(2);
-        assertThat(result).
     }
+
+    @Test
+    void shouldUpdateEmployee() {
+        // Arrange
+        var employee = Employee.builder()
+                .firstName("TestFirstName")
+                .lastName("TestLastName")
+                .email("test@email.com")
+                .build();
+        testee.save(employee);
+
+        var updatedEmployee = employee.toBuilder().email("new@email.com").build();
+        testee.save(updatedEmployee);
+
+        // Act
+        var result = testee.findById(employee.getId()).get();
+
+        // Assert
+        assertThat(result).returns("new@email.com", Employee::getEmail);
+    }
+
+    @Test
+    void shouldDeleteEmployee() {
+        // Arrange
+        var employee1 = Employee.builder()
+                .firstName("TestFirstName1")
+                .lastName("TestLastName1")
+                .email("test@email.com1")
+                .build();
+        var employee2 = Employee.builder()
+                .firstName("TestFirstName2")
+                .lastName("TestLastName2")
+                .email("test@email.com2")
+                .build();
+        testee.save(employee1);
+        testee.save(employee2);
+
+        // Act
+        testee.delete(employee2);
+
+        // Assert
+        var result = testee.findAll();
+        assertThat(result).hasSize(1);
+    }
+
 
 }
