@@ -34,4 +34,28 @@ public class EmployeeRepositoryTests {
                 .returns("test@email.com", Employee::getEmail);
     }
 
+    @Test
+    void shouldSaveAllEmployees() {
+        // Arrange
+        var employee1 = Employee.builder()
+                .firstName("TestFirstName1")
+                .lastName("TestLastName1")
+                .email("test@email.com1")
+                .build();
+        var employee2 = Employee.builder()
+                .firstName("TestFirstName2")
+                .lastName("TestLastName2")
+                .email("test@email.com2")
+                .build();
+        testee.save(employee1);
+        testee.save(employee2);
+
+        // Act
+        var result = testee.findAll();
+
+        // Assert
+        assertThat(result).hasSize(2);
+        assertThat(result).
+    }
+
 }
